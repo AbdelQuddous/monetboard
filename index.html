@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MonetBoard: AdMob earnings, explained</title>
+  <meta name="description" content="MonetBoard is a read-only revenue monitor for AdMob publishers. See what you earned, how it compares, and what caused the change.">
+  <meta property="og:title" content="MonetBoard: AdMob earnings, explained">
+  <meta property="og:description" content="Know where your AdMob revenue stands, and why it moved.">
+  <meta property="og:image" content="https://abdelquddous.github.io/monetboard/img/01-revenue-at-a-glance.webp">
+  <link rel="icon" type="image/png" href="img/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f5f4f0;
+      --surface: #ffffff;
+      --ink: #15171c;
+      --muted: #5d626d;
+      --line: #e4e2dc;
+      --accent: #4865d9;
+      --accent-soft: #e8ecfb;
+      --good: #1f9d63;
+      --shadow: 0 30px 60px -30px rgba(21, 23, 28, .35);
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0f1114;
+        --surface: #171a1f;
+        --ink: #f1f2f4;
+        --muted: #9aa0ab;
+        --line: #262a31;
+        --accent: #9cafff;
+        --accent-soft: #1d2440;
+        --good: #4cc98c;
+        --shadow: 0 30px 60px -30px rgba(0, 0, 0, .8);
+      }
+    }
+    * { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font: 16px/1.6 Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .wrap { max-width: 1080px; margin: 0 auto; padding: 0 20px; }
+
+    header.nav { display: flex; align-items: center; justify-content: space-between; padding: 22px 0; }
+    .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 18px; color: var(--ink); }
+    .brand img { width: 34px; height: 34px; border-radius: 9px; }
+    .nav-links { display: flex; gap: 22px; font-size: 14px; }
+    .nav-links a { color: var(--muted); }
+
+    .hero { display: grid; grid-template-columns: 1.1fr .9fr; gap: 48px; align-items: center; padding: 48px 0 72px; }
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--accent-soft); color: var(--accent);
+      font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+      padding: 6px 12px; border-radius: 999px;
+    }
+    h1 { font-size: clamp(38px, 6vw, 60px); line-height: 1.04; letter-spacing: -.035em; margin: 18px 0 18px; font-weight: 800; }
+    .lede { font-size: 19px; color: var(--muted); max-width: 520px; margin: 0 0 30px; }
+    .cta { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: var(--ink); color: var(--bg);
+      padding: 14px 22px; border-radius: 14px; font-weight: 600; font-size: 15px;
+    }
+    .btn:hover { text-decoration: none; opacity: .9; }
+    .btn svg { width: 20px; height: 20px; }
+    .note { font-size: 13px; color: var(--muted); }
+    .phone { justify-self: center; width: min(340px, 100%); border-radius: 34px; overflow: hidden; box-shadow: var(--shadow); border: 1px solid var(--line); }
+    .phone img { display: block; width: 100%; height: auto; }
+
+    section { padding: 64px 0; border-top: 1px solid var(--line); }
+    h2 { font-size: clamp(28px, 4vw, 38px); letter-spacing: -.025em; line-height: 1.15; margin: 0 0 14px; }
+    .section-lede { color: var(--muted); max-width: 620px; margin: 0 0 36px; font-size: 17px; }
+
+    .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    .card { background: var(--surface); border: 1px solid var(--line); border-radius: 20px; padding: 24px; }
+    .card .ico { width: 40px; height: 40px; border-radius: 12px; background: var(--accent-soft); color: var(--accent); display: grid; place-items: center; margin-bottom: 14px; }
+    .card .ico svg { width: 20px; height: 20px; }
+    .card h3 { margin: 0 0 6px; font-size: 17px; letter-spacing: -.01em; }
+    .card p { margin: 0; color: var(--muted); font-size: 15px; }
+
+    .shots { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+    .shots img { width: 100%; height: auto; border-radius: 18px; border: 1px solid var(--line); display: block; }
+
+    .trust { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start; }
+    .checks { list-style: none; padding: 0; margin: 0; display: grid; gap: 14px; }
+    .checks li { display: flex; gap: 12px; color: var(--muted); }
+    .checks li strong { color: var(--ink); font-weight: 600; }
+    .checks svg { flex: none; width: 20px; height: 20px; color: var(--good); margin-top: 3px; }
+
+    footer { border-top: 1px solid var(--line); padding: 32px 0 48px; color: var(--muted); font-size: 14px; }
+    .foot { display: flex; flex-wrap: wrap; gap: 14px 28px; justify-content: space-between; }
+    .foot nav { display: flex; flex-wrap: wrap; gap: 20px; }
+    .disclaimer { margin-top: 18px; font-size: 13px; max-width: 720px; }
+
+    @media (max-width: 860px) {
+      .hero { grid-template-columns: 1fr; padding-top: 24px; }
+      .grid { grid-template-columns: 1fr; }
+      .shots { grid-template-columns: repeat(2, 1fr); }
+      .trust { grid-template-columns: 1fr; gap: 24px; }
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="nav">
+      <a class="brand" href="./"><img src="img/icon.png" alt="" width="34" height="34">MonetBoard</a>
+      <nav class="nav-links">
+        <a href="#features">Features</a>
+        <a href="#privacy">Privacy</a>
+        <a href="https://abdelquddous.github.io/pp-adboard/">Privacy policy</a>
+      </nav>
+    </header>
+
+    <main>
+      <div class="hero">
+        <div>
+          <span class="eyebrow">For AdMob publishers</span>
+          <h1>Know where your revenue stands, and why it moved.</h1>
+          <p class="lede">MonetBoard reads your AdMob report and tells you what you earned, how it compares with the previous period, and what caused the change: traffic or pricing, which app, which country, which ad format.</p>
+          <div class="cta">
+            <a class="btn" href="https://play.google.com/store/apps/details?id=com.abdelquddos.admonitor">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4.3 2.2c-.2.2-.3.6-.3 1v17.6c0 .4.1.8.3 1l9.8-9.8L4.3 2.2Zm10.8 10.8 2.6 2.6-11.2 6.4 8.6-9Zm0-2L6.5 2l11.2 6.4-2.6 2.6Zm3.7 3.7L16 12l2.8-2.8 3.2 1.8c.9.5.9 1.5 0 2l-3.2 1.7Z"/></svg>
+              Get it on Google Play
+            </a>
+            <span class="note">Free, with an optional one-time upgrade to remove ads.</span>
+          </div>
+        </div>
+        <div class="phone">
+          <img src="img/01-revenue-at-a-glance.webp" width="540" height="960" alt="MonetBoard home screen showing estimated earnings, the change against the previous 30 days and a daily earnings chart">
+        </div>
+      </div>
+
+      <section id="features">
+        <h2>Answers, not just numbers.</h2>
+        <p class="section-lede">Every explanation is calculated on your device from your own AdMob data, and shows the figures behind it. Nothing is guessed or generated.</p>
+        <div class="grid">
+          <div class="card">
+            <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg></div>
+            <h3>At a glance</h3>
+            <p>Estimated earnings, the change against an equal-length window, and a daily trend with unusual days called out.</p>
+          </div>
+          <div class="card">
+            <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></div>
+            <h3>Signals that explain</h3>
+            <p>Volume versus yield, biggest movers, delivery shifts and concentration risk, ranked by impact.</p>
+          </div>
+          <div class="card">
+            <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M4 12h10M4 18h6"/></svg></div>
+            <h3>Investigate any change</h3>
+            <p>Break results down by app, country, ad format or ad unit, and follow the funnel from requests to clicks.</p>
+          </div>
+        </div>
+      </section>
+
+      <section aria-label="Screenshots">
+        <div class="shots">
+          <img src="img/01-revenue-at-a-glance.webp" width="540" height="960" loading="lazy" alt="Earnings at a glance">
+          <img src="img/03-signals.webp" width="540" height="960" loading="lazy" alt="Signals ranked by impact">
+          <img src="img/04-explain.webp" width="540" height="960" loading="lazy" alt="Side-by-side period comparison">
+          <img src="img/08-read-only.webp" width="540" height="960" loading="lazy" alt="Read-only Google sign-in">
+        </div>
+      </section>
+
+      <section id="privacy">
+        <div class="trust">
+          <div>
+            <h2>Private and read-only.</h2>
+            <p class="section-lede">MonetBoard signs in with Google using read-only AdMob reporting access. It cannot change your ads, payments or account settings.</p>
+          </div>
+          <ul class="checks">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg><span><strong>Straight to your device.</strong> Reports travel directly from Google to your phone. Your earnings are not stored on our servers.</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg><span><strong>Privacy mode.</strong> Hide every amount on screen when you share your screen or work in public.</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg><span><strong>Your call.</strong> Revoke access at any time from your <a href="https://myaccount.google.com/permissions">Google account</a>.</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg><span><strong>Try first.</strong> Demo mode opens a realistic sample portfolio before you connect an account.</span></li>
+          </ul>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="foot">
+        <span>© 2026 MonetBoard</span>
+        <nav>
+          <a href="https://abdelquddous.github.io/pp-adboard/">Privacy policy</a>
+          <a href="https://abdelquddous.github.io/pp-adboard/terms/">Terms of use</a>
+          <a href="mailto:abdquddos@gmail.com">Contact</a>
+        </nav>
+      </div>
+      <p class="disclaimer">MonetBoard is an independent app and is not affiliated with or endorsed by Google. AdMob is a trademark of Google LLC. Estimated earnings come from the AdMob Network report and may differ from your final payment.</p>
+    </footer>
+  </div>
+</body>
+</html>
